@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Registrar Nueva Venta - Nova Salud</title>
+</head>
+<body>
+    <h1>Registrar Nueva Venta</h1>
+
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <label>Cliente:</label>
+        <select name="cliente" required>
+            <option value="">-- Seleccione --</option>
+            {% for cliente in clientes %}
+                <option value="{{ cliente.id }}">{{ cliente.nombre }}</option>
+            {% endfor %}
+        </select>
+
+        <h3>Productos</h3>
+        <div id="productos-container">
+            {% for producto in productos %}
+                <div>
+                    <input type="checkbox" name="producto" value="{{ producto.id }}" id="prod{{ producto.id }}">
+                    <label for="prod{{ producto.id }}">{{ producto.nombre }} (Stock: {{ producto.stock }})</label>
+                    <input type="number" name="cantidad" min="1" max="{{ producto.stock }}" placeholder="Cantidad" disabled>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit">Registrar Venta</button>
+    </form>
+
+    <a href="{% url 'inicio' %}">Volver al inicio</a>
+
+    <script>
+        // Habilita cantidad solo si está seleccionado el producto
+        const productosContainer = document.getElementById('productos-container');
+        productosContainer.querySelectorAll('input[type="checkbox"]').forEach(chk => {
+            chk.addEventListener('change', (e) => {
+                const cantidadInput = chk.nextElementSibling.nextElementSibling;
+                cantidadInput.disabled = !chk.checked;
+                if (!chk.checked) cantidadInput.value = '';
+            });
+        });
+    </script>
+</body>
+</html>

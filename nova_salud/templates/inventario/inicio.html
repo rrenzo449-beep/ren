@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Nova Salud - Inicio</title>
+</head>
+<body>
+    <h1>Bienvenido a Nova Salud</h1>
+
+    {% if productos_bajo_stock %}
+    <h2>¡Atención! Productos con bajo stock:</h2>
+    <ul>
+        {% for producto in productos_bajo_stock %}
+            <li>{{ producto.nombre }} - Stock: {{ producto.stock }}</li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>No hay productos con bajo stock.</p>
+    {% endif %}
+
+    <nav>
+        <a href="{% url 'lista_productos' %}">Ver Productos</a> |
+        <a href="{% url 'nueva_venta' %}">Registrar Venta</a>
+    </nav>
+</body>
+</html>
